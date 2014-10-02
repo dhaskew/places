@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   get 'misc_pages/index'
 
   root to: 'misc_pages#index'
