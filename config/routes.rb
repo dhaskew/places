@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
-  get 'misc_pages/index'
+  #get 'misc_pages/index'
 
   root to: 'misc_pages#index'
   # The priority is based upon order of creation: first created -> highest priority.
