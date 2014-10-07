@@ -5,10 +5,10 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
 
   def after_sign_in_path_for(user)
-    if !user.setup?
-      user_setup_path
+    if user.setup?
+      dashboard_path
     else
-      root_path
+      user_setup_path
     end
   end
 

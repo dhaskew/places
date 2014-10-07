@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   
   get "/user_setup" => "misc_pages#user_setup"
 
-  root to: 'misc_pages#index'
+  get "/dashboard" => "misc_pages#dashboard"
+
+  root to: 'misc_pages#landing_page'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

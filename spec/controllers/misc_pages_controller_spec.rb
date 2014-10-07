@@ -8,11 +8,18 @@ describe MiscPagesController do
       @user = create :user
       sign_in @user
     end
-    describe "GET index" do
+    describe "GET landing_page" do
       it "returns http success" do
-        get :index
+        get :landing_page
         expect(response).to have_http_status(:success)
       end
     end
+    describe "GET dashboard" do
+      it "returns http success" do
+        get :dashboard
+        expect(response).to have_http_status(:success)
+      end
+    end
+  
   end
 end
