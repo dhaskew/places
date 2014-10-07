@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
   #get 'misc_pages/index'
+  
+  get "/user_setup" => "misc_pages#user_setup"
 
   root to: 'misc_pages#index'
   # The priority is based upon order of creation: first created -> highest priority.
