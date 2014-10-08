@@ -5,8 +5,9 @@ FactoryGirl.define do
     password_confirmation "awfulPass"
   end
 
-  #trait :seller do
-  #  role 'seller'
-  #end
+  trait :evernote_connected do
+    evernote_token 'foobar_token_value'
+    evernote_token_dttm Time.now
+  end
 
 end

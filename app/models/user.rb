@@ -26,8 +26,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable
 
-  validates :email, presence: true
-  validates :password, presence: true
+  #validates :email, presence: true
+  #validates :password, presence: true
 
   def setup?
     evernote_valid?
