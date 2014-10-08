@@ -43,4 +43,10 @@ RSpec.describe User, :type => :model do
     expect( @user.setup? ).to eq false 
   end
 
+  it "has a message count of unread messages in his/her inbox" do
+    expect( @user.inbox_unread_count ).to eq(0) 
+    create :message, read: false, user: @user
+    expect( @user.inbox_unread_count ).to eq(1)
+  end
+
 end

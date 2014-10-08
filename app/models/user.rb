@@ -25,12 +25,16 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable
-
+  has_many :messages
   #validates :email, presence: true
   #validates :password, presence: true
 
   def setup?
     evernote_valid?
+  end
+
+  def inbox_unread_count 
+    self.messages.where(read: false).count    
   end
 
   private

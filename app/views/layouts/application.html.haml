@@ -28,6 +28,11 @@
         %a.navbar-brand(href="#") Places
         .navbar-collapse.collapse.navbar-responsive-collapse
           %ul.nav.navbar-nav.pull-right
+            %li
+              = link_to '#' do
+                Inbox 
+                %span.badge 
+                  = current_user.inbox_unread_count 
             %li= link_to "Log Out", destroy_user_session_path, method: :delete
     .container
       .row
