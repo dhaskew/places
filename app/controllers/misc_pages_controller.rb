@@ -44,7 +44,15 @@ class MiscPagesController < ApplicationController
     search_results = note_store.findNotes(search_info,0,10)
     total_notes = search_results.totalNotes
     (0...total_notes).each do |i|
-      puts search_results.notes[i].guid
+      next_note = note_store.getNote(token,search_results.notes[i].guid, true,false,false,false)
+      title = next_note.title
+      guid = next_note.guid
+      note_content = next_note.content
+      en = current_user.enotes.new
+      en.title = title
+      en.guid = guid
+      en.note = note_content
+      en.save!
     end
     redirect_to :dashboard
   end

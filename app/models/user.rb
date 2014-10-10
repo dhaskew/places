@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable
   has_many :messages
+  has_many :enotes
   #validates :email, presence: true
   #validates :password, presence: true
 
