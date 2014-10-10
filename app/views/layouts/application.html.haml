@@ -19,17 +19,18 @@
 
 
   %body
+    
     .navbar.navbar-default.navbar-static-top
       .container
         %button.navbar-toggle(type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse")
           %span.icon-bar
           %span.icon-bar
           %span.icon-bar
-        %a.navbar-brand(href="#") Places
+        %a.navbar-brand(href=dashboard_path) Places
         .navbar-collapse.collapse.navbar-responsive-collapse
           %ul.nav.navbar-nav.pull-right
             %li
-              = link_to '#' do
+              = link_to '#',{ id: "inbox_count" } do
                 Inbox 
                 %span.badge 
                   = current_user.inbox_unread_count 
@@ -40,12 +41,37 @@
         .col-lg-12
           = bootstrap_flash
           = yield
-        -#.col-lg-3
-          .well.sidebar-nav
-            %h3 Sidebar
-            %ul.nav.nav-list
-              %li.nav-header Sidebar
-              %li= link_to "Link 2", "/path2"
-              %li= link_to "Link 3", "/path3"
-      -#%footer
-        %p &copy; Company 2014
+
+=render partial: "shared/inbox"
+
+:javascript
+  $(function(){
+
+    setInterval( function(){ 
+      update_message_count();
+      }, 10000
+    );
+
+    var update_message_count = function(){
+      $.get('/inbox.json', function(data) {
+        $('#inbox_count>span').text(data.length)    
+      });
+    }
+
+    $('#inbox_count').click(function(e) {
+      $.get('/inbox.json', function(data) { 
+        $('#messages > tbody > tr').remove(); 
+        var messages = data;
+        for(x = 0; x < messages.length; x++){
+          var num = messages[x]['id'];
+          var msg_text = messages[x]['text'];
+          var read = messages[x]['read'];
+          var create = messages[x]['created_at'];
+          
+          var new_row = '<tr><td>' + num + '</td>'+'<td>'+ create +'</td>'+'<td>'+ msg_text + '</td</tr>'
+          $('#messages > tbody:last').append(new_row);
+        }
+      });
+      $('#inbox-modal').modal('show');
+    });
+  });

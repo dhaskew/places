@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   def evernote_valid?
     return false if self.evernote_token == nil
     return false if self.evernote_token_dttm == nil
-    return false if self.evernote_token_dttm + 364 < Time.now
+    return false if self.evernote_token_dttm + 364.days < Time.now
     return true    
   end
     

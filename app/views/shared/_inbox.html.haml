@@ -1,0 +1,15 @@
+#inbox-modal.modal.fade{tabindex:"-1", role: "dialog"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.text-center Inbox Messages 
+      .modal-body.col-md-12
+        %table.table.table-striped#messages
+          %thead
+            %tr
+              %th.col-md-1 ID
+              %th.col-md-3 Received 
+              %th.col-md-8 Message
+          %tbody
+      .modal-footer
+        %button.btn.btn-default.btn-primary{"data-dismiss"=>"modal"} Close 

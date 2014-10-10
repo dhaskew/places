@@ -11,7 +11,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     set_flash_message(:notice, :success, :kind => "Evernote") if is_navigational_format?
     @user.save!
     #session["devise.evernote_data"] = request.env["omniauth.auth"]
-    redirect_to dashboard_path 
+    new_message = @user.messages.new
+    new_message.text = "Evernote connected"
+    new_message.save!
+    redirect_to dashboard_path
   end
   
 end

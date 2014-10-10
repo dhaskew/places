@@ -8,7 +8,7 @@ feature 'Dashboard' do
       login @user
       expect( @user.setup? ).to eq true
       expect( current_path ).to eq dashboard_path
-      expect( page ).to have_content('Inbox 0') 
+      expect( page ).to have_css('#inbox_count', text: 'Inbox 0') 
     end
 
   end
@@ -19,7 +19,7 @@ feature 'Dashboard' do
       @message = create :message, user: @user
       login @user
       expect( current_path ).to eq dashboard_path
-      expect( page ).to have_content('Inbox 1')
+      expect( page ).to have_css('#inbox_count', text: 'Inbox 1')
     end
   end
 

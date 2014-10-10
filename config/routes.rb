@@ -4,7 +4,13 @@ Rails.application.routes.draw do
   
   get "/user_setup" => "misc_pages#user_setup"
 
+  get "/inbox" => "misc_pages#inbox"
+
   get "/dashboard" => "misc_pages#dashboard"
+
+  get "/evernote_setup" => "misc_pages#evernote_setup"
+
+  post "/evernote_import" => "misc_pages#evernote_import"
 
   root to: 'misc_pages#landing_page'
   # The priority is based upon order of creation: first created -> highest priority.

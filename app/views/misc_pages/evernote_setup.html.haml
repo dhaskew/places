@@ -1,0 +1,11 @@
+%h2 Select the notebook that contains your notes:
+= form_tag evernote_import_path, method: 'POST', class: "form" do
+  .btn-group{"data-toggle" => "buttons"}
+  - @notebooks.each do |nb|
+    %p
+    %label
+      = radio_button_tag 'notebook', "#{nb[:guid]}", false
+      #{nb[:name]} 
+  %p  
+  = submit_tag 'Continue', class: "btn btn-primary"
+
