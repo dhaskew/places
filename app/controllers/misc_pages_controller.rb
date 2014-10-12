@@ -11,6 +11,15 @@ class MiscPagesController < ApplicationController
   def dashboard
   end
 
+  def popular_visits
+    visits = current_user.visits.group(:name, :latitude, :longitude).count
+    visits = visits.map{|key,value| {name:key[0], lat:key[1], lng:key[2], count:value}}  
+    respond_to do |format|
+      format.json { render json:visits, status: :ok }
+      format.html { redirect_to :dashboard }
+    end
+  end
+
   def inbox
     @messages = current_user.messages 
     respond_to do |format|
@@ -25,13 +34,6 @@ class MiscPagesController < ApplicationController
     note_store = client.note_store
     evernote_notebooks = note_store.listNotebooks(token)
     @notebooks = evernote_notebooks.map { |nb| { name:nb.name,guid:nb.guid }}
-    #nb = note_store.getNotebook(notebooks[1].guid)
-    #filter = Evernote::EDAM::NoteStore::NoteFilter.new
-    #filter.notebookGuid = nb.guid
-    #note_list = note_store.findNotes(filter, 0, 10)
-    #sample_note = note_store.getNote(token,"4d9d90c7-46ea-435c-a3b2-ecf5f3e1e13b", true,false,false,false)
-    #note_title = sample_note.title
-    #note_content = sample_note.content
   end
 
   def evernote_import

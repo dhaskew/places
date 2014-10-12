@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
          :omniauthable
   has_many :messages
   has_many :enotes
+  has_many :visits, :through  => :enotes
   #validates :email, presence: true
   #validates :password, presence: true
 

@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   post "/evernote_import" => "misc_pages#evernote_import"
 
+  get "/popular_visits" => "misc_pages#popular_visits"
+
   root to: 'misc_pages#landing_page'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

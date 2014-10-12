@@ -13,5 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
-//
-//= require_tree .
+//= require google_maps.js 
+//= require heatmap.js
+//= require gmaps-heatmap.js

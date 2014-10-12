@@ -1,2 +1,32 @@
-%h1 MiscPages#dashboard
-%p Find me in app/views/misc_pages/dashboard.html.haml
+%div#map-canvas{style:"position:relative; border:1px dashed black; width:800px; height:600px"}
+
+:javascript
+  $(function() {
+    var myLatlng = new google.maps.LatLng(33.836944, -84.355795);
+    var myOptions = {
+      zoom: 10,
+      center: myLatlng
+    };
+    map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+
+    heatmap = new HeatmapOverlay(map,
+      {
+        "radius":.005,
+        "maxOpacity": 1,
+        "scaleRadius": true,
+        "useLocalExtrema": true,
+        latField: 'lat',
+        lngField: 'lng',
+        valueField: 'count'
+      }
+    );
+
+    $.get('/popular_visits.json', function(data) { 
+      var mapdata = {
+        max: data.length,
+        data: data
+      }
+      heatmap.setData(mapdata);
+    });
+
+  });
