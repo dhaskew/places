@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.1.6'
 gem 'pg' #postgresql
+gem 'geocoder' #turn addresses into lat/longitude or vice/versa
 
 gem 'sass-rails', '~> 4.0.3' # Use SCSS for stylesheets
 
