@@ -45,14 +45,22 @@ class MiscPagesController < ApplicationController
     total_notes = search_results.totalNotes
     (0...total_notes).each do |i|
       next_note = note_store.getNote(token,search_results.notes[i].guid, true,false,false,false)
-      title = next_note.title
-      guid = next_note.guid
-      note_content = next_note.content
       en = current_user.enotes.new
-      en.title = title
-      en.guid = guid
-      en.note = note_content
+      en.title = next_note.title
+      en.guid = next_note.guid
+      en.note = next_note.content
       en.save!
+
+      parsed = EnoteParser.parse(next_note.content)
+      parsed.visits.each do |visit|
+        v = en.visits.new
+        v.name = visit[:name]
+        v.link = visit[:href]
+        v.address = visit[:address]
+        v.duration = visit[:mins]
+        v.save!
+      end      
+
     end
     redirect_to :dashboard
   end
