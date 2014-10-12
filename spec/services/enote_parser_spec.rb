@@ -1,5 +1,5 @@
 
-describe EnoteParser, :focus  do
+describe EnoteParser do
   it "should parse an enote" do
     note = File.read("spec/support/test_note.xml")
     parsed_note = EnoteParser.parse note
@@ -10,8 +10,8 @@ describe EnoteParser, :focus  do
     expect( parsed_note.visits[0][:address]).to eq "25105 Plantation Dr NE, Atlanta, GA"
     expect( parsed_note.visits[1][:name]).to eq "Moe's"
     expect( parsed_note.visits[1][:address]).to eq "2311 North Druid Hills Rd NE, Atlanta, GA"
-    expect( parsed_note.visits[0][:duration]).to eq 1169
-    expect( parsed_note.visits[1][:duration]).to eq 7
+    expect( parsed_note.visits[0][:mins]).to eq 1169
+    expect( parsed_note.visits[1][:mins]).to eq 7
   end
 end
 

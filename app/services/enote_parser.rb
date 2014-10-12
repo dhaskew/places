@@ -30,14 +30,20 @@ class EnoteParser
       durration = text_to_minutes node.children[5].children[0].text
       pn.add name, href, address, durration
     end
-    binding.pry
     return pn
   end
 
   private
   
   def self.text_to_minutes durration
-    return durration  
+    words = durration.scan(/\w+/)
+    if words.length == 2
+      return words[0].to_i
+    elsif words.length == 4
+      return ((words[0].to_i * 60) + words[2].to_i)
+    else
+      return ((words[0].to_i * 24 * 60) + (words[2].to_i * 60) + words[4].to_i)
+    end
   end
 
 end
