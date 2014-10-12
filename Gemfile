@@ -26,7 +26,7 @@ gem 'spring',        group: :development
 gem 'evernote_oauth'
 gem 'omniauth-evernote'
 gem 'figaro'
-
+gem 'nokogiri'
 gem "haml-rails"
 gem "twitter-bootstrap-rails"
 group :development do
