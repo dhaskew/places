@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141012172545) do
+ActiveRecord::Schema.define(version: 20141013140723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,18 @@ ActiveRecord::Schema.define(version: 20141012172545) do
   end
 
   add_index "enotes", ["user_id"], name: "index_enotes_on_user_id", using: :btree
+
+  create_table "locations", force: true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.string   "address"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "locations", ["user_id"], name: "index_locations_on_user_id", using: :btree
 
   create_table "messages", force: true do |t|
     t.integer  "user_id"
@@ -67,8 +79,10 @@ ActiveRecord::Schema.define(version: 20141012172545) do
     t.datetime "updated_at"
     t.float    "latitude"
     t.float    "longitude"
+    t.integer  "location_id"
   end
 
   add_index "visits", ["enote_id"], name: "index_visits_on_enote_id", using: :btree
+  add_index "visits", ["location_id"], name: "index_visits_on_location_id", using: :btree
 
 end

@@ -1,6 +1,25 @@
-%h1 MiscPages#landing_page
-%p Find me in app/views/misc_pages/landing_page.html.haml
+.container
+  .row
+    %div.col-lg-12{style:"margin:150px 0px 25px 0px;"}
+      .row{style:"margin:50px 0px 25px 0px;"}
+        %div.col-lg-12
+          %div.col-lg-3
+          %div.col-lg-2
+            = image_tag 'google-pin.jpg'
+          %div.col-lg-4{style:"margin:20px 0px 25px 0px;"}
+            %h1.text-center PlacesAbout.Me
+            %h3.text-center What do the places you go to say about you?
+            %h2.text-center
+              = link_to "log in", new_user_session_path
+          %div.col-lg-3
+  -#.row    
+  -#  %p 
+  -#.row
+  -#  %div.col-lg-12#bottom_pics
+  -#    %div.col-lg-4
+  -#      = image_tag 'evernote.png', {style:"width:100%;"}
+  -#    %div.col-lg-4 
+  -#      = image_tag 'placeme1.jpg', {style:"width:100%;"} 
+  -#    %div.col-lg-4 
+  -#      = image_tag 'google1.png',  {style:"width:100%;"} 
 
-%p
-  = link_to "log in", new_user_session_path
-  = image_tag 'evernote.png'

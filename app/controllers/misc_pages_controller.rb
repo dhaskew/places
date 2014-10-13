@@ -11,8 +11,21 @@ class MiscPagesController < ApplicationController
   def dashboard
   end
 
+  def lengthy_visits
+    visits = current_user.visits.group(:name,:latitude,:longitude).sum(:duration)
+    visits = visits.map{|key,value| {name:key[0], lat:key[1], lng:key[2], count:value}}  
+    visits = visits.sort_by { |hash| hash[:count] }.reverse
+    respond_to do |format|
+      format.json { render json:visits, status: :ok }
+      format.html { redirect_to :dashboard }
+    end
+
+  end
+
   def popular_visits
-    visits = current_user.visits.group(:name, :latitude, :longitude).count
+    visits = current_user.visits.where.not(name: 'Elaine Quinilty').group(:name, :latitude, :longitude).count
+    #visits = current_user.visits.group(:name, :latitude, :longitude).count
+    
     visits = visits.map{|key,value| {name:key[0], lat:key[1], lng:key[2], count:value}}  
     respond_to do |format|
       format.json { render json:visits, status: :ok }
@@ -22,6 +35,17 @@ class MiscPagesController < ApplicationController
 
   def inbox
     @messages = current_user.messages 
+    respond_to do |format|
+      format.json { render json:current_user.messages, status: :ok }
+      format.html { redirect_to :dashboard }
+    end
+  end
+
+  def delete_message
+    message_id = params["id"]
+    message = current_user.messages.where(id: message_id)
+    Message.destroy(message)
+    @messages = current_user.messages
     respond_to do |format|
       format.json { render json:current_user.messages, status: :ok }
       format.html { redirect_to :dashboard }
@@ -43,25 +67,30 @@ class MiscPagesController < ApplicationController
     note_store = client.note_store
     search_info = Evernote::EDAM::NoteStore::NoteFilter.new
     search_info.notebookGuid = notebook
-    search_results = note_store.findNotes(search_info,0,10)
+    search_results = note_store.findNotes(search_info,0,1000)
     total_notes = search_results.totalNotes
     (0...total_notes).each do |i|
-      next_note = note_store.getNote(token,search_results.notes[i].guid, true,false,false,false)
-      en = current_user.enotes.new
-      en.title = next_note.title
-      en.guid = next_note.guid
-      en.note = next_note.content
-      en.save!
+      sleep 0.25
+      begin
+        next_note = note_store.getNote(token,search_results.notes[i].guid, true,false,false,false)
+        en = current_user.enotes.new
+        en.title = next_note.title
+        en.guid = next_note.guid
+        en.note = next_note.content
+        en.save!
 
-      parsed = EnoteParser.parse(next_note.content)
-      parsed.visits.each do |visit|
-        v = en.visits.new
-        v.name = visit[:name]
-        v.link = visit[:href]
-        v.address = visit[:address]
-        v.duration = visit[:mins]
-        v.save!
-      end      
+        parsed = EnoteParser.parse(next_note.content)
+        parsed.visits.each do |visit|
+          v = en.visits.new
+          v.name = visit[:name]
+          v.link = visit[:href]
+          v.address = visit[:address]
+          v.duration = visit[:mins]
+          v.save!
+        end      
+      rescue
+        puts "something bad happened"
+      end
 
     end
     redirect_to :dashboard

@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
   has_many :messages
   has_many :enotes
   has_many :visits, :through  => :enotes
+  has_many :locations
   #validates :email, presence: true
   #validates :password, presence: true
 

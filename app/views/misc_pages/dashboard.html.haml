@@ -1,10 +1,21 @@
-%div#map-canvas{style:"position:relative; border:1px dashed black; width:800px; height:600px"}
-
+.container
+  .row
+    %div.col-lg-8#map-canvas{style:"border:1px dashed black; width:maximum; height:600px"}
+    %div.col-lg-4#visit-list
+      %h4 Top 15 Places (Time in Minutes)
+      %table.table.table-striped
+        %thead
+          %th Name
+          %th Count
+        %tbody
+          %tr
+            %td Elaine Quinilty
+            %td 100
 :javascript
   $(function() {
     var myLatlng = new google.maps.LatLng(33.836944, -84.355795);
     var myOptions = {
-      zoom: 10,
+      zoom: 11,
       center: myLatlng
     };
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
@@ -14,19 +25,27 @@
         "radius":.005,
         "maxOpacity": 1,
         "scaleRadius": true,
-        "useLocalExtrema": true,
+        "useLocalExtrema": false,
         latField: 'lat',
         lngField: 'lng',
         valueField: 'count'
       }
     );
 
-    $.get('/popular_visits.json', function(data) { 
+    $.get('/lengthy_visits.json', function(data) { 
       var mapdata = {
         max: data.length,
         data: data
-      }
+      } 
+      $('#visit-list > table > tbody >tr').remove(); 
+        var visits = data;
+        for(x = 0; x < 15; x++){
+          var num = visits[x]['count'];
+          var name = visits[x]['name'];
+          
+          var new_row = '<tr><td>' + name + '</td>'+'<td>'+ num +'</td></tr>';
+          $('#visit-list > table > tbody:last').append(new_row);
+      };
       heatmap.setData(mapdata);
-    });
-
+    });  
   });

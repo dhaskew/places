@@ -58,20 +58,30 @@
       });
     }
 
-    $('#inbox_count').click(function(e) {
+    var update_messages_dialog = function(){
       $.get('/inbox.json', function(data) { 
-        $('#messages > tbody > tr').remove(); 
-        var messages = data;
-        for(x = 0; x < messages.length; x++){
-          var num = messages[x]['id'];
-          var msg_text = messages[x]['text'];
-          var read = messages[x]['read'];
-          var create = messages[x]['created_at'];
-          
-          var new_row = '<tr><td>' + num + '</td>'+'<td>'+ create +'</td>'+'<td>'+ msg_text + '</td</tr>'
-          $('#messages > tbody:last').append(new_row);
-        }
+         $('#messages > tbody > tr').remove(); 
+         var messages = data;
+         for(x = 0; x < messages.length; x++){
+           var num = messages[x]['id'];
+           var msg_text = messages[x]['text'];
+           var read = messages[x]['read'];
+           var create = messages[x]['created_at'];
+             
+           var new_row = '<tr><td>' + num + '</td>'+'<td>'+ create +'</td>'+'<td>'+ msg_text + '</td><td>'+'<button id="m'+num+'" class="btn">X</button>'+'</td></tr>'
+           $('#messages > tbody:last').append(new_row);
+           $('#m'+num).click(function(e) {
+             id = e.currentTarget['id'].slice(1);
+             $.post("/delete_message", { id: id });
+             update_messages_dialog();     
+             update_message_count();
+           });
+         }
       });
+    }
+
+    $('#inbox_count').click(function(e) {
+      update_messages_dialog();
       $('#inbox-modal').modal('show');
     });
   });
