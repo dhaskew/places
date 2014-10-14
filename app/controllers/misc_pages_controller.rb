@@ -11,17 +11,74 @@ class MiscPagesController < ApplicationController
   def dashboard
   end
 
+  def rewrite_visit
+    visit = params[:visit_id]
+    location = params[:loc_id]
+    @existing_visit = current_user.visits.find_by_id(visit)
+    @existing_visit.update_attributes location_id: location
+    respond_to do |format|
+      format.json { render json:@existing_visit, status: :ok}
+      format.html { redirect_to :dashboard }
+    end
+  end
+
+  def new_location
+    l = current_user.locations.new
+    l.name = params[:name]
+    l.address = params[:address]
+    l.save!
+    locations = current_user.locations
+    respond_to do |format|
+      format.json { render json:locations, status: :ok}
+      format.html { redirect_to :dashboard }
+    end
+  end
+
+  def visit_location_remove
+    v = current_user.visits.find_by_id(params[:id])
+    v.update_attributes location_id: nil
+    @visits = current_user.visits.includes(:location)
+    respond_to do |format|
+      format.json { render json:visits, status: :ok }
+      format.html { redirect_to :dashboard }
+    end
+  end
+
+  def show_location
+    loc_id = params[:id]
+    @location = current_user.locations.find_by_id(loc_id)
+    @visits = current_user.visits.where(location_id: loc_id)
+    @locations = current_user.locations
+  end
+
   def visit_show
     @visit_name = params[:name] 
-    @visits = current_user.visits.where(name: @visit_name)
+    @visits = current_user.visits.where(name: @visit_name).includes(:location)
+    @locations = current_user.locations
   end
 
   def lengthy_visits
-    cvisits = current_user.visits.where.not(name: 'Elaine Quinilty').group(:name,:latitude,:longitude).sum(:duration)
+    cvisits = current_user.visits.where(location: nil).where.not(name: 'Elaine Quinilty').group(:name,:latitude,:longitude).sum(:duration)
     cvisits = cvisits.map{|key,value| {name:key[0], lat:key[1], lng:key[2], count:value}}  
     cvisits = cvisits.sort_by { |hash| hash[:count] }.reverse
+
+    temp_locations = current_user.visits.where.not(location_id:nil).group("location_id").sum(:duration)
+
+    clocations = []
+
+    temp_locations.keys.each do |key|
+      cloc = current_user.locations.find_by_id(key)
+      cname = cloc.name
+      ccount = temp_locations[key]
+      clat = cloc.latitude
+      clng = cloc.longitude
+      clocations << { name: cname, id: key, count: ccount, lat: clat, lng: clng }
+    end
+
+    ctotal = (cvisits + clocations).sort_by{ |hash| hash[:count] }.reverse
+
     respond_to do |format|
-      format.json { render json:cvisits, status: :ok }
+      format.json { render json:ctotal, status: :ok }
       format.html { redirect_to :dashboard }
     end
 

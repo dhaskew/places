@@ -1,10 +1,17 @@
 #newlocation-modal.modal.fade{tabindex:"-1", role: "dialog"}
-  .modal-dialog.modal-lg
+  .modal-dialog.modal-md
     .modal-content
       .modal-header
         %h3.text-center Create A Custom Location 
       .modal-body.col-md-12
-        %p form goes here 
+        = form_tag '/newlocation', method: 'POST', class: "form" do
+          %label Name
+          %p
+          %input#newname{:size=> 40, :name => "locname", :value => "", :type => "text"}
+          %p
+          %label Address
+          %p
+          %input#newaddress{:size => 40, :name => "locaddress", :value => "", :type => "text"}
       .modal-footer
-        %button.btn.btn-default.btn-primary Save 
+        %button.btn.btn-default.btn-primary#save_location Save
         %button.btn.btn-default.btn-primary{"data-dismiss"=>"modal"} Cancel 

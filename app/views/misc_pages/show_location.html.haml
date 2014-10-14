@@ -1,14 +1,12 @@
-.div{style:"height:400px; max-height:600px"}
-  .well.col-lg-6
-    .well
-      %h1 #{@visit_name}
-      %h2 Count:( #{@visits.count} )
-    .well
-      %h4 Address : #{@visits[0].address}
-      %h4#lat Latitude : #{@visits[0].latitude}
-      %h4#lng Longitude : #{@visits[0].longitude}
-  %div.col-lg-6#map-canvas{style:"border:1px dashed black; width:maximum; height: 100%; margins: 10px 10px;" }
-  
+
+%h1 Visits for #{@location.name} ( #{@visits.count} )
+.well.col-lg-6
+  %h4 Address : #{@location.address}
+  %h4 Latitude : #{@location.latitude}
+  %h4 Longitude : #{@location.longitude}
+.well.col-lg-6
+  %div.col-lg-8#map-canvas{style:"border:1px dashed black; width:maximum; height:300px"}
+
 %table.table.tbl.tbl-striped
   %thead
     %tr
@@ -36,11 +34,8 @@
 
 :javascript
   $(function () {
-
-    var clat = parseFloat($("#lat").text().substring(11,50));
-    var clng = parseFloat($("#lng").text().substring(11,50));
-
-    var myLatlng = new google.maps.LatLng(clat,clng);
+    
+    var myLatlng = new google.maps.LatLng(33.836944, -84.355795);
     var myOptions = {
       zoom: 11,
       center: myLatlng

@@ -18,8 +18,16 @@ Rails.application.routes.draw do
 
   get "/lengthy_visits" => "misc_pages#lengthy_visits"
  
-  get ":visits/:name" => "misc_pages#visit_show"
-  
+  get "/visits/:name" => "misc_pages#visit_show"
+ 
+  post "/new_location" => "misc_pages#new_location"
+
+  post "/rewrite_visit" => "misc_pages#rewrite_visit"
+
+  post "/visit_location_remove" => "misc_pages#visit_location_remove"
+
+  get "/locations/:id" => "misc_pages#show_location"
+
   root to: 'misc_pages#landing_page'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
