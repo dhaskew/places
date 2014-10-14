@@ -1,22 +1,5 @@
 
 - if @has_data
-  .container.col-lg-12
-    .row
-      %div.col-lg-1
-        = image_tag 'google-pin.jpg', {style:"height:70px;"}
-      .well.col-lg-11
-        %p 
-          You can view a heatmap of your visits by count 
-          = link_to "here", user_setup_path
-    .row
-      %div.col-lg-1
-        = image_tag 'google-pin.jpg', {style:"height:70px;"}
-  
-      .well.col-lg-11
-        %p
-          You can view a heatmap of your visits by durration (in minutes)
-          = link_to "here", vis_min_path
-  
   .container
     .row
       %div.col-lg-8#map-canvas{style:"border:1px dashed black; width:maximum; height:600px"}
@@ -28,7 +11,7 @@
             %th Count
           %tbody
             %tr
-              %td Elaine Quinilty
+              %td Bogus Placeholder 
               %td 100
 - else
   .container
