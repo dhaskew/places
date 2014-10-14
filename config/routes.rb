@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   get "/popular_visits" => "misc_pages#popular_visits"
 
   get "/lengthy_visits" => "misc_pages#lengthy_visits"
+ 
+  get ":visits/:name" => "misc_pages#visit_show"
   
   root to: 'misc_pages#landing_page'
   # The priority is based upon order of creation: first created -> highest priority.

@@ -22,7 +22,7 @@
 
     heatmap = new HeatmapOverlay(map,
       {
-        "radius":.005,
+        "radius":.015,
         "maxOpacity": 1,
         "scaleRadius": true,
         "useLocalExtrema": false,
@@ -42,8 +42,10 @@
         for(x = 0; x < 15; x++){
           var num = visits[x]['count'];
           var name = visits[x]['name'];
-          
-          var new_row = '<tr><td>' + name + '</td>'+'<td>'+ num +'</td></tr>';
+
+          var visit_link = '<a href=/visits/' + encodeURIComponent(name) + '>' + name + '</a>'
+
+          var new_row = '<tr><td>' + visit_link + '</td>'+'<td>'+ num +'</td></tr>';
           $('#visit-list > table > tbody:last').append(new_row);
       };
       heatmap.setData(mapdata);

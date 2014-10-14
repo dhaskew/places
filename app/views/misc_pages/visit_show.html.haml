@@ -1,0 +1,40 @@
+
+%h1 Visits for #{@visit_name} ( #{@visits.count} )
+
+%table.table.tbl.tbl-striped
+  %thead
+    %tr
+      %th Visit Date
+      %th Visit Duration
+      %th Rewritten To
+      %th Rewrite to 
+  %tbody
+  - @visits.each do |visit|
+    %tr
+      %td
+        = visit.enote.title.slice(12,50)
+      %td
+        = visit.duration
+      %td
+        = visit.location_id
+        - if (visit.location_id != nil)
+          = link_to "(-)", "#", class:"remove_location", id:"remove_location#{visit.id}"
+      %td
+        = select_tag "locations#{visit.id}", options_from_collection_for_select(@visits, "id", "name"), include_blank: true, class: "locations"
+        = link_to "(+)", "#", class: "add_location", id:"add_location#{visit.id}"
+
+
+=render partial: "shared/newlocation"
+
+:javascript
+  $(function () {
+
+    $('.locations').bind('change', function(e) { 
+      console.log(e.target.id);
+    });
+
+    $('.add_location').bind('click', function(e) {
+      $('#newlocation-modal').modal('show');
+      console.log(e.target.id);
+    });
+  });

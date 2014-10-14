@@ -11,12 +11,17 @@ class MiscPagesController < ApplicationController
   def dashboard
   end
 
+  def visit_show
+    @visit_name = params[:name] 
+    @visits = current_user.visits.where(name: @visit_name)
+  end
+
   def lengthy_visits
-    visits = current_user.visits.group(:name,:latitude,:longitude).sum(:duration)
-    visits = visits.map{|key,value| {name:key[0], lat:key[1], lng:key[2], count:value}}  
-    visits = visits.sort_by { |hash| hash[:count] }.reverse
+    cvisits = current_user.visits.where.not(name: 'Elaine Quinilty').group(:name,:latitude,:longitude).sum(:duration)
+    cvisits = cvisits.map{|key,value| {name:key[0], lat:key[1], lng:key[2], count:value}}  
+    cvisits = cvisits.sort_by { |hash| hash[:count] }.reverse
     respond_to do |format|
-      format.json { render json:visits, status: :ok }
+      format.json { render json:cvisits, status: :ok }
       format.html { redirect_to :dashboard }
     end
 
@@ -27,6 +32,7 @@ class MiscPagesController < ApplicationController
     #visits = current_user.visits.group(:name, :latitude, :longitude).count
     
     visits = visits.map{|key,value| {name:key[0], lat:key[1], lng:key[2], count:value}}  
+    visits = visits.sort_by { |hash| hash[:count] }.reverse
     respond_to do |format|
       format.json { render json:visits, status: :ok }
       format.html { redirect_to :dashboard }
