@@ -14,7 +14,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     new_message = @user.messages.new
     new_message.text = "Evernote connected"
     new_message.save!
-    redirect_to dashboard_path
+    redirect_to evernote_setup_path 
   end
   
 end

@@ -1,0 +1,69 @@
+
+- if @has_data
+  .container
+    .row
+      %div.col-lg-8#map-canvas{style:"border:1px dashed black; width:maximum; height:600px"}
+      %div.col-lg-4#visit-list
+        %h4 Top Places (# of visits)
+        %table.table.table-striped
+          %thead
+            %th Name
+            %th Count
+          %tbody
+            %tr
+              %td Bogus Placeholder 
+              %td 100
+- else
+  .container
+    .row
+      %p You don't appear to have any data. Try to connect to evernote again and import some data.
+      %p
+        = link_to "Connect to Evernote", user_setup_path
+:javascript
+  $(function() {
+    var myLatlng = new google.maps.LatLng(33.836944, -84.355795);
+    var myOptions = {
+      zoom: 11,
+      center: myLatlng
+    };
+    map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+
+    heatmap = new HeatmapOverlay(map,
+      {
+        "radius":.03,
+        "maxOpacity": 1,
+        "scaleRadius": true,
+        "useLocalExtrema": false,
+        latField: 'lat',
+        lngField: 'lng',
+        valueField: 'count'
+      }
+    );
+
+    $.get('/popular_visits.json', function(data) { 
+      var mapdata = {
+        max: data.length,
+        data: data
+      } 
+      $('#visit-list > table > tbody >tr').remove(); 
+        var visits = data;
+        for(x = 0; x < 15; x++){
+          var num = visits[x]['count'];
+          var name = visits[x]['name'];
+          var id = visits[x]['id'];
+
+          if (id)
+          {
+             var visit_link = '<a href=/locations/' + encodeURIComponent(id) + '>' + name + '</a>'
+          
+          } 
+          else 
+          {
+            var visit_link = '<a href=/visits/' + encodeURIComponent(name) + '>' + name + '</a>'
+          }
+          var new_row = '<tr><td>' + visit_link + '</td>'+'<td>'+ num +'</td></tr>';
+          $('#visit-list > table > tbody:last').append(new_row);
+      };
+      heatmap.setData(mapdata);
+    });  
+  });

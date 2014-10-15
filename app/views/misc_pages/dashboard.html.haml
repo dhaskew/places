@@ -1,86 +1,28 @@
 
 - if @has_data
   .container.col-lg-12
+    .row{style:"margin-bottom:50px;"}
+      %h1.text-center Available Tools 
     .row
       %div.col-lg-1
-        = image_tag 'google-pin.jpg', {style:"height:70px;"}
-      .well.col-lg-11
-        %p 
-          You can view a heatmap of your visits by count 
-          = link_to "here", user_setup_path
+        = image_tag 'google-pin.jpg', {style:"height:95px;"}
+      .well.col-lg-3.text-center
+        %h3
+          = link_to "Visits by Duration", vis_min_path
+      .well.col-lg-8
+        %h3 Show me the places I spend a lot of my time.
     .row
       %div.col-lg-1
-        = image_tag 'google-pin.jpg', {style:"height:70px;"}
+        = image_tag 'google-pin.jpg', {style:"height:95px;"}
+      .well.col-lg-3.text-center
+        %h3
+          = link_to "Visits by Count", vis_count_path
+      .well.col-lg-8
+        %h3 Show me the places I visit frequently. 
   
-      .well.col-lg-11
-        %p
-          You can view a heatmap of your visits by durration (in minutes)
-          = link_to "here", vis_min_path
-  
-  .container
-    .row
-      %div.col-lg-8#map-canvas{style:"border:1px dashed black; width:maximum; height:600px"}
-      %div.col-lg-4#visit-list
-        %h4 Top Places (Time in Minutes)
-        %table.table.table-striped
-          %thead
-            %th Name
-            %th Count
-          %tbody
-            %tr
-              %td Elaine Quinilty
-              %td 100
 - else
   .container
     .row
       %p You don't appear to have any data. Try to connect to evernote again and import some data.
       %p
         = link_to "Connect to Evernote", user_setup_path
-:javascript
-  $(function() {
-    var myLatlng = new google.maps.LatLng(33.836944, -84.355795);
-    var myOptions = {
-      zoom: 11,
-      center: myLatlng
-    };
-    map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-
-    heatmap = new HeatmapOverlay(map,
-      {
-        "radius":.015,
-        "maxOpacity": 1,
-        "scaleRadius": true,
-        "useLocalExtrema": false,
-        latField: 'lat',
-        lngField: 'lng',
-        valueField: 'count'
-      }
-    );
-
-    $.get('/lengthy_visits.json', function(data) { 
-      var mapdata = {
-        max: data.length,
-        data: data
-      } 
-      $('#visit-list > table > tbody >tr').remove(); 
-        var visits = data;
-        for(x = 0; x < 15; x++){
-          var num = visits[x]['count'];
-          var name = visits[x]['name'];
-          var id = visits[x]['id'];
-
-          if (id)
-          {
-             var visit_link = '<a href=/locations/' + encodeURIComponent(id) + '>' + name + '</a>'
-          
-          } 
-          else 
-          {
-            var visit_link = '<a href=/visits/' + encodeURIComponent(name) + '>' + name + '</a>'
-          }
-          var new_row = '<tr><td>' + visit_link + '</td>'+'<td>'+ num +'</td></tr>';
-          $('#visit-list > table > tbody:last').append(new_row);
-      };
-      heatmap.setData(mapdata);
-    });  
-  });

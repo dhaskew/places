@@ -10,6 +10,10 @@ Rails.application.routes.draw do
 
   get "/dashboard" => "misc_pages#dashboard"
 
+  get "/vis_min" => "misc_pages#viz_min"
+
+  get "/vis_count" => "misc_pages#viz_count"
+
   get "/evernote_setup" => "misc_pages#evernote_setup"
 
   post "/evernote_import" => "misc_pages#evernote_import"

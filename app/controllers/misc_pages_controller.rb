@@ -9,6 +9,17 @@ class MiscPagesController < ApplicationController
   end
 
   def dashboard
+    @has_data = false
+    @has_data = true if current_user.visits.count > 0
+  end
+
+  def viz_min
+    @has_data = false
+    @has_data = true if current_user.visits.count > 0
+  end
+  
+  def viz_count
+    @has_data = has_data?
   end
 
   def rewrite_visit
@@ -85,6 +96,33 @@ class MiscPagesController < ApplicationController
   end
 
   def popular_visits
+    cvisits = current_user.visits.where(location: nil).where.not(name: 'Elaine Quinilty').group(:name,:latitude,:longitude).count
+    cvisits = cvisits.map{|key,value| {name:key[0], lat:key[1], lng:key[2], count:value}}  
+    cvisits = cvisits.sort_by { |hash| hash[:count] }.reverse
+
+    temp_locations = current_user.visits.where.not(location_id:nil).group("location_id").count
+
+    clocations = []
+
+    temp_locations.keys.each do |key|
+      cloc = current_user.locations.find_by_id(key)
+      cname = cloc.name
+      ccount = temp_locations[key]
+      clat = cloc.latitude
+      clng = cloc.longitude
+      clocations << { name: cname, id: key, count: ccount, lat: clat, lng: clng }
+    end
+
+    ctotal = (cvisits + clocations).sort_by{ |hash| hash[:count] }.reverse
+
+    respond_to do |format|
+      format.json { render json:ctotal, status: :ok }
+      format.html { redirect_to :dashboard }
+    end
+
+  end
+=begin
+  def popular_visits
     visits = current_user.visits.where.not(name: 'Elaine Quinilty').group(:name, :latitude, :longitude).count
     #visits = current_user.visits.group(:name, :latitude, :longitude).count
     
@@ -95,7 +133,7 @@ class MiscPagesController < ApplicationController
       format.html { redirect_to :dashboard }
     end
   end
-
+=end
   def inbox
     @messages = current_user.messages 
     respond_to do |format|
@@ -156,7 +194,17 @@ class MiscPagesController < ApplicationController
       end
 
     end
+    m = current_user.messages.new
+    m.text = "Notes successfully imported!"
+    m.save!
     redirect_to :dashboard
+  end
+
+  private
+
+  def has_data? 
+    return true if current_user.visits.count > 0
+    return false
   end
 
 end
